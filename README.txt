@@ -6,3 +6,10 @@ Our current goal is to implement (using OpenCV or a similar library) a recognize
 To test this, we will train on a dataset, and then attempt to catagorize 100 images ourselves, and then run the recognizer on those 100 images.
 We will consider our implementation successful if it succeeds at identifying the breed in more of those 100 images than we could.
 Our images (for both training and testing) will be pulled from http://vision.stanford.edu/aditya86/ImageNetDogs/?fbclid=IwAR2HdY5Ox4YT-KImp67K89v8uAV8rgUZgl4RnUdIHzN1EcEKM5PV9sOb7-0
+
+
+Dependencies:
+Keras
+tqdm
+Tensorflow
+Python 3.6.5 (3.7 does not support TensorFlow)
