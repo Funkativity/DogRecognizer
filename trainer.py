@@ -19,6 +19,7 @@ validation_data_dir = 'dogImages/valid'
 epochs = 50  
 # batch size used by flow_from_directory and predict_generator  
 batch_size = 16 
+num_classes = 136
 
 datagen_top = ImageDataGenerator(rescale=1./255)  
 generator_top = datagen_top.flow_from_directory(  
@@ -61,17 +62,17 @@ top_model.add(Dense(133, activation='relu'))
 top_model.add(Dropout(0.5))  
 top_model.add(Dense(num_classes, activation='relu'))
 
-model.compile(optimizer='rmsprop',  
+top_model.compile(optimizer='rmsprop',  
             loss='categorical_crossentropy', metrics=['accuracy'])  
 
-history = model.fit(train_data, train_labels,  
+history = top_model.fit(train_data, train_labels,  
         epochs=epochs,  
         batch_size=batch_size,  
         validation_data=(validation_data, validation_labels))  
 
-model.save_weights(top_model_weights_path)  
+top_model.save_weights(top_model_weights_path)  
 
-(eval_loss, eval_accuracy) = model.evaluate(  
+(eval_loss, eval_accuracy) = top_model.evaluate(  
     validation_data, validation_labels, batch_size=batch_size, verbose=1)
 
 print("[INFO] accuracy: {:.2f}%".format(eval_accuracy * 100))  

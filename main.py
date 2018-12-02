@@ -1,5 +1,7 @@
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input, decode_predictions
+from keras.layers import Dropout, Flatten, Dense  
+from keras.models import Sequential  
 from keras.preprocessing import image     
 from keras.utils import np_utils
 from tqdm import tqdm
@@ -14,16 +16,22 @@ def load_dataset(path):
     dog_targets = np_utils.to_categorical(np.array(data['target']), 133)
     return dog_files, dog_targets
 
-# load train, test, and validation datasets
-train_files, train_targets = load_dataset('dogImages/train')
-valid_files, valid_targets = load_dataset('dogImages/valid')
+# load test dataset
 test_files, test_targets = load_dataset('dogImages/test')
-
+top_model_weights_path = 'dog_recognition_bottleneck_model.h5' 
 # load list of dog names (this does not correspond to imagenet labels)
 dog_names = [item[20:-1] for item in sorted(glob("dogImages/train/*/"))]
+num_classes = len(dog_names)
+
 # define ResNet50 model
-baseResNet50 = ResNet50(include_top=False, weights='imagenet')
-print(baseResNet50)
+base_ResNet50 = ResNet50(include_top=False, weights='imagenet')
+#our top_model that works on top of resnet50
+top_model = Sequential()  
+top_model.add(Flatten(input_shape=base_ResNet50.output.shape[1:]))  
+top_model.add(Dense(133, activation='relu'))  
+top_model.add(Dropout(0.5))  
+top_model.add(Dense(num_classes, activation='relu'))
+top_model.load_weights(top_model_weights_path)  
 
 def path_to_tensor(img_path):
     # loads RGB image as PIL.Image.Image type
@@ -38,11 +46,14 @@ def paths_to_tensor(img_paths):
     return np.vstack(list_of_tensors)
 
 
-def ResNet50_predict_labels(img_path):
+def predict_labels(img_path):
     # returns prediction vector for image located at img_path
     img = preprocess_input(path_to_tensor(img_path))
-    return np.argmax(ResNet50_model.predict(img))
+    img = img / 255 # not sure if i need to do this, may remove later
+    bottle_features = base_ResNet50.predict(img)
+    output = top_model.predict(bottle_features)
+    return dog_names[np.argmax(output)]
 
-doggy_index = ResNet50_predict_labels("./dogImages/test/122.Pointer/Pointer_07838.jpg")
+doggy_name = predict_labels("./dogImages/test/122.Pointer/Pointer_07838.jpg")
 
-print(doggy_index)
+print(doggy_name)
