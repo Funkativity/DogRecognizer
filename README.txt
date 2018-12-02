@@ -12,4 +12,7 @@ Dependencies:
 Keras
 tqdm
 Tensorflow
-Python 3.6.5 (3.7 does not support TensorFlow)
+Python 3.6.* (3.7 does not support TensorFlow)
+Numpy
+Glob
+sklearn

@@ -1,12 +1,29 @@
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input, decode_predictions
-from keras.preprocessing import image                  
+from keras.preprocessing import image     
+from keras.utils import np_utils
 from tqdm import tqdm
 import numpy as np
+from glob import glob
+from sklearn.datasets import load_files       
 
+
+def load_dataset(path):
+    data = load_files(path)
+    dog_files = np.array(data['filenames'])
+    dog_targets = np_utils.to_categorical(np.array(data['target']), 133)
+    return dog_files, dog_targets
+
+# load train, test, and validation datasets
+train_files, train_targets = load_dataset('dogImages/train')
+valid_files, valid_targets = load_dataset('dogImages/valid')
+test_files, test_targets = load_dataset('dogImages/test')
+
+# load list of dog names (this does not correspond to imagenet labels)
+dog_names = [item[20:-1] for item in sorted(glob("dogImages/train/*/"))]
 # define ResNet50 model
-ResNet50_model = ResNet50(weights='imagenet')
-
+baseResNet50 = ResNet50(include_top=False, weights='imagenet')
+print(baseResNet50)
 
 def path_to_tensor(img_path):
     # loads RGB image as PIL.Image.Image type
@@ -26,4 +43,6 @@ def ResNet50_predict_labels(img_path):
     img = preprocess_input(path_to_tensor(img_path))
     return np.argmax(ResNet50_model.predict(img))
 
-print(ResNet50_predict_labels("./Images/n02085782-Japanese_spaniel/n02085782_1039.jpg"))
+doggy_index = ResNet50_predict_labels("./dogImages/test/122.Pointer/Pointer_07838.jpg")
+
+print(doggy_index)
