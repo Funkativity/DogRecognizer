@@ -13,8 +13,8 @@ import cv2
 img_width, img_height = 224, 224  
 # dimensions of our images.  
 top_model_weights_path = 'dog_recognition_bottleneck_model.h5'  
-train_data_dir = 'dogImages/train'  
-validation_data_dir = 'dogImages/valid'  
+train_data_dir = os.path.join("dogImages","train")  
+validation_data_dir = os.path.join("dogImages","valid") 
 # number of epochs to train top model  
 epochs = 50  
 # batch size used by flow_from_directory and predict_generator  
