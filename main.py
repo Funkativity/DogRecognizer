@@ -20,7 +20,7 @@ def load_dataset(path):
 
 # load test dataset
 test_files, test_targets = load_dataset(test_path)
-top_model_weights_path = 'dog_recognition_bottleneck_model.h5' #we need to put the generated weights into here for trainer.py
+top_model_weights_path = os.path.join('weights','dog_recognition_bottleneck_model.h5')
 # load list of dog names (this does not correspond to imagenet labels)
 #dog_names = [item[20:-1] for item in sorted(glob(training_path))]
 # num_classes = len(dog_names)
@@ -89,4 +89,7 @@ doggy_name = predict_labels(os.path.join(test_path, "001.Affenpinscher","Affenpi
 #  x = predict_labels(os.path.join(test_path,"001.Affenpinscher","Affenpinscher_00023.jpg"))
 print(doggy_name)
 doggy_name = predict_labels(os.path.join(test_path,"001.Affenpinscher","Affenpinscher_00023.jpg"))
+print(doggy_name)
+doggy_name = predict_labels(os.path.join('test_path','136.Dean','Capture24'))
+print(doggy_name)
 # # print(doggy_name)

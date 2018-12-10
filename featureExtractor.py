@@ -17,8 +17,9 @@ ImageFile.LOAD_TRUNCATED_IMAGES=True
 # Runs on test half of dogs we pulled from online, puts their bottleneck features in bottleneck_features_train.npy
 #train_path = os.path.join("specificDogs","babyBeckham")
 train_path = os.path.join("dogImages","train")
-#training_path = os.path.join("dogIspecificDogsmages", "babyBeckham", "*")
-training_path = os.path.join("dogImages", "train", "*")
+valid_path = os.path.join("dogImages","valid")
+test_path = os.path.join("dogImages","test")
+
 def load_dataset(path):
     data = load_files(path)
     dog_files = np.array(data['filenames'])
@@ -27,7 +28,9 @@ def load_dataset(path):
 
 # load test dataset
 train_files, train_labels = load_dataset(train_path)
-top_model_weights_path = 'bottleneck_features' #we need to put the generated weights into here for trainer.py
+train_bottleneck_features_path = 'train_bottleneck_features' #we need to put the generated weights into here for trainer.py
+valid_bottleneck_features_path = 'valid_bottleneck_features'
+test_bottleneck_features_path = "test_bottleneck_features"
 # load list of dog names (this does not correspond to imagenet labels)
 #dog_names = [item[20:-1] for item in sorted(glob(training_path))]
 # num_classes = len(dog_names)
@@ -59,8 +62,37 @@ train_samples = len(generator.filenames)
 num_classes = len(generator.class_indices)
 predict_size_train = int(math.ceil(train_samples/batchsize))
 
-print("generating bottleneck features")
+print("generating training bottleneck features")
 bottleneck_features_trained = base_ResNet50.predict_generator(generator, predict_size_train)
 
 print("saving features")
-np.save(top_model_weights_path, bottleneck_features_trained)
+np.save(train_bottleneck_features_path, bottleneck_features_trained)
+bottleneck_features_trained = None
+
+
+batchsize = 1
+print("generating validation features")
+generator = datagen.flow_from_directory(valid_path,
+                                        target_size=(224,224),
+                                        batch_size=batchsize, 
+                                        class_mode=None,
+                                        shuffle=False)
+valid_samples = len(generator.filenames)
+predict_size_valid = valid_samples
+bottleneck_features_valid = base_ResNet50.predict_generator(generator, predict_size_valid)
+np.save(valid_bottleneck_features_path, bottleneck_features_valid)
+bottleneck_features_valid = None
+
+print("now generating test features")
+generator = datagen.flow_from_directory(test_path,
+                                        target_size=(224,224),
+                                        batch_size=batchsize, 
+                                        class_mode=None,
+                                        shuffle=False)
+test_samples = len(generator.filenames)
+predict_size_test = test_samples
+bottleneck_features_test = base_ResNet50.predict_generator(generator, predict_size_test)
+np.save(test_bottleneck_features_path, bottleneck_features_test)
+
+
+

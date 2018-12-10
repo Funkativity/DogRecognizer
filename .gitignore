@@ -2,3 +2,6 @@ Images/
 dogImages/
 bottleneck_features.npy
 dog_recognition_bottleneck_model.h5
+specificDogs/
+*.npy
+weights/
