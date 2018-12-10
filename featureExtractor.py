@@ -23,7 +23,7 @@ test_path = os.path.join("dogImages","test")
 def load_dataset(path):
     data = load_files(path)
     dog_files = np.array(data['filenames'])
-    dog_targets = np_utils.to_categorical(np.array(data['target']), 133)
+    dog_targets = np_utils.to_categorical(np.array(data['target']), 138)
     return dog_files, dog_targets
 
 # load test dataset

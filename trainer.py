@@ -21,7 +21,7 @@ validation_data_dir = os.path.join("dogImages","valid")
 epochs = 500
 # batch size used by flow_from_directory and predict_generator  
 batch_size = 16 
-num_classes = 133
+num_classes = 138
 
 datagen_top = ImageDataGenerator()  
 generator_top = datagen_top.flow_from_directory(  
@@ -62,7 +62,7 @@ validation_labels = to_categorical(validation_labels, num_classes=num_classes)
 print("building network")
 top_model = Sequential()  
 top_model.add(Flatten(input_shape=train_data.shape[1:]))  
-top_model.add(Dense(133, activation='relu'))  
+top_model.add(Dense(138, activation='relu'))  
 top_model.add(Dropout(0.5))  
 top_model.add(Dense(num_classes, activation='relu'))
 top_model.compile(optimizer='rmsprop',  
