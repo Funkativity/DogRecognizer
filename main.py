@@ -30,15 +30,16 @@ base_ResNet50 = ResNet50(include_top=False, weights='imagenet')
 full_ResNet50 = ResNet50(weights="imagenet")
 
 # top layer of resnet50, to check if the bottleneck features are what we expect
-layers = full_ResNet50.layers
-print(layers)
-top_ResNet50 = Model(inputs=layers[len(layers)-2].output, outputs=layers[len(layers)-1].output)
+# layers = full_ResNet50.layers
+# print(layers)
+# top_ResNet50 = Model(inputs=layers[len(layers)-2].output, outputs=layers[len(layers)-1].output)
 
  #our top_model that works on top of resnet50
-train_data = np.load('dog_recognition_bottleneck_model.npy')  
+# train_data = np.load('dog_recognition_bottleneck_model.npy')  
+m_input_shape=(6680,7,7,2048)
 
 top_model = Sequential()  
-top_model.add(Flatten(input_shape=train_data.shape[1:]))  
+top_model.add(Flatten(input_shape=m_input_shape[1:]))  
 top_model.add(Dense(133, activation='relu'))  
 top_model.add(Dropout(0.5))  
 top_model.add(Dense(133, activation='softmax'))

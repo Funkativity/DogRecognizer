@@ -37,7 +37,7 @@ num_classes = len(generator_top.class_indices)
 # load the bottleneck features saved earlier  
 print("loading bottleneck training features")
 train_data = np.load('bottleneck_features.npy')  
-
+print(train_data.shape)
 # get the class lebels for the training data, in the original order  
 train_labels = generator_top.classes  
 

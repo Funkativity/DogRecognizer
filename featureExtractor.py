@@ -51,12 +51,13 @@ def predict_labels(img_path):
     return bottle_features
 
 #for loop?
+batchsize=16
 datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 generator = datagen.flow_from_directory(train_path, target_size=(224,224),
-                                        batch_size=16, class_mode=None, shuffle=False)
+                                        batch_size=batchsize, class_mode=None, shuffle=False)
 train_samples = len(generator.filenames)
 num_classes = len(generator.class_indices)
-predict_size_train = int(math.ceil(train_samples))
+predict_size_train = int(math.ceil(train_samples/batchsize))
 
 print("generating bottleneck features")
 bottleneck_features_trained = base_ResNet50.predict_generator(generator, predict_size_train)
