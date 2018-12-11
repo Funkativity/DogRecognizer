@@ -20,7 +20,7 @@ training_path = os.path.join("dogImages", "train", "*")
 
 # uncomment the following one if you want to predict using only general weights
 num_classes = 138
-top_model_weights_path = os.path.join('weights','specific_breeds.h5') 
+top_model_weights_path = os.path.join('weights','specific_breeds_10epochs.h5') 
 
 
 def load_dataset(path):
@@ -78,8 +78,8 @@ def predict_labels(img_path):
     bottle_features = base_ResNet50.predict(img)
     output = top_model.predict(bottle_features)
     dog_index = np.argmax(output)
-    print(str(dog_index)+ ": score = " + str(output[0][dog_index]))
-    return output
+    print(dog_names[dog_index]+ ": score = " + str(output[0][dog_index]))
+    return dog_names[int(dog_index)]
     # return dog_names[np.argmax(output), output(np.argmax(output))]
 
 doggy_name = regular_ol_resnet(os.path.join(test_path,"001.Affenpinscher","Affenpinscher_00003.jpg"))
@@ -91,4 +91,5 @@ doggy_name = predict_labels(os.path.join(test_path,"001.Affenpinscher","Affenpin
 print(doggy_name)
 doggy_name = predict_labels(os.path.join(test_path,'136.Dean','Capture24.png'))
 print(doggy_name)
+print(predict_labels("test_doge2.jpg"))
 # # print(doggy_name)

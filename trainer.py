@@ -18,7 +18,7 @@ top_model_weights_path = 'dog_recognition_bottleneck_model.h5'
 train_data_dir = os.path.join("dogImages","train")  
 validation_data_dir = os.path.join("dogImages","valid") 
 # number of epochs to train top model  
-epochs = 500
+epochs = 25
 # batch size used by flow_from_directory and predict_generator  
 batch_size = 16 
 num_classes = 138
